@@ -23,11 +23,10 @@ class BaseForm:
                     initial = self.initial.get(name, field.initial)
                     value = field.clean(value, initial)
                 else:
-                    value = field.clean(value)
-
-                    if isinstance(value, unicode):
-                        value = value.strip()
-
+                    if isinstance(value, basestring):
+                        value = field.clean(value.strip())
+                    else:
+                        value = field.clean(value)
                 self.cleaned_data[name] = value
                 if hasattr(self, 'clean_%s' % name):
                     value = getattr(self, 'clean_%s' % name)()
